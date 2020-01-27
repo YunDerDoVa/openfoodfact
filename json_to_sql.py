@@ -15,8 +15,6 @@ class Food(db.Entity):
 
 class OpenFoodFacts:
 
-    DEBUG = True
-
     def __init__(self):
         self.products = []
         self.foods = []
