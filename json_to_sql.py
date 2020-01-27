@@ -1,20 +1,25 @@
 import json
 import requests
+from pony.orm import *
 
-class Food:
-    def __init__(self, name):
-        self.name = name
+db = Database()
+
+class Food(db.Entity):
+
+    id = PrimaryKey(int, auto=True)
+    name = Required(str)
+    categories = Required(Json)
+    brands = Required(str)
+    code = Required(str)
+    nutriments = Required(Json)
 
 class OpenFoodFacts:
 
     DEBUG = True
 
     def __init__(self):
-
         self.products = []
-
-        self.__fetch_products('pizzas')
-        self.__wash_products()
+        self.foods = []
 
     def __fetch_products(self, category):
         url = 'https://fr-en.openfoodfacts.org/category/'+category+'.json'
@@ -22,6 +27,10 @@ class OpenFoodFacts:
         page = json.loads(r.text)
 
         number_of_pages = int(page['count']/page['page_size'])
+
+        # Uncomment this line to launch a speed fetch
+        #number_of_pages = 1
+
         print(str(number_of_pages) + ' pages')
 
         for index_page in range(number_of_pages):
@@ -36,21 +45,36 @@ class OpenFoodFacts:
 
                 self.products.append(page['products'][index_page_product])
 
-    def __wash_products(self):
-        count = 0
-        for product in self.products:
-            count += 1
-
-        print(str(count) + ' products washed')
-
     def __product_to_food(self, product):
-        food = Food(product['product_name'])
-        print(food.name)
+        food = Food(
+            name=product['product_name'],
+            categories=product['categories_tags'],
+            brands=product['brands'],
+            code=product['code'],
+            nutriments=product['nutriments'],
+        )
+        return food
 
-    def get_food(self, id):
+    def __get_food(self, id):
         return self.__product_to_food(self.products[id])
 
+    @db_session
+    def fill_database(self):
+        self.__fetch_products('pizzas')
+        self.__fetch_products('pies')
+
+        for index_product in range(len(self.products)):
+            print(str(index_product+1) + '/' + str(len(self.products)))
+            try:
+                self.foods.append(self.__get_food(index_product))
+                print('Yes')
+            except:
+                print('No')
+
+
+#db.bind(provider='sqlite', filename='database.sqlite', create_db=True)
+db.bind(provider='mysql', host='localhost', user='root', passwd='', db='openfoodfacts')
+db.generate_mapping(create_tables=True)
 
 openfoodfacts = OpenFoodFacts()
-
-print(openfoodfacts.get_food(42))
+openfoodfacts.fill_database()
