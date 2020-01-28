@@ -44,11 +44,11 @@ To find substitutes, run the program and follow these instructions :
 `5`
 
 > *We found a substitute for 5*
-
+>
 > *Name : ...*
-
+>
 > *Description : ...*
-
+>
 > *Brands : ...*
-
+>
 > *View on OpenFoodFacts : ...*
