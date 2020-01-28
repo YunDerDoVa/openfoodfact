@@ -9,7 +9,7 @@ To find substitutes, run the program and follow these instructions :
 
 > *Find substitutes (1) or go to the favori-list (2) ?*
 
-$> `1`
+`$> 1`
 
 > *Choose a category :*
 >
@@ -25,7 +25,7 @@ $> `1`
 > - *Pizzas (10)*
 > - *Pizzas (11)*
 
-$> `3`
+`$> 3`
 
 > *Choose a food*
 >
@@ -41,7 +41,7 @@ $> `3`
 > - *Pizzas (10)*
 > - *Pizzas (11)*
 
-$> `5`
+`$> 5`
 
 > *We found a substitute for 5*
 >
@@ -62,5 +62,31 @@ When you are in the substitute's page, the program will propose you to save
 > - *No (0)*
 > - *Yes (1)*
 
-You only have to press input `1` if you want to save. Program exit after this
-input
+You only have to input **1** if you want to save, **2** if you don't want.
+Program exit after this input.
+
+### Refund Substituted Food
+To refund a favored substitutes, run the program and follow these instructions :
+
+> *Find substitutes (1) or go to the favored-list (2) ?*
+
+`$> 2`
+
+> *Your favored food*
+>
+> - *Pizza (1)*
+> - *Pizza (2)*
+> - *Pizza (3)*
+> - *Pizza (4)*
+> - *Pizza (5)*
+
+`$> 5`
+
+> *Your substitute for 5*
+>
+> - *Name : ...*
+> - *Description : ...*
+> - *Brands : ...*
+> - *View on OpenFoodFacts : ...*
+
+The program exit after this
