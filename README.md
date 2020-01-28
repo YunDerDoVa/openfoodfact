@@ -29,17 +29,17 @@ To find substitutes, run the program and follow these instructions :
 
 > *Choose a food*
 >
-> - *Pizzas (1)*
-> - *Pizzas (2)*
-> - *Pizzas (3)*
-> - *Pizzas (4)*
-> - *Pizzas (5)*
-> - *Pizzas (6)*
-> - *Pizzas (7)*
-> - *Pizzas (8)*
-> - *Pizzas (9)*
-> - *Pizzas (10)*
-> - *Pizzas (11)*
+> - *Pizza (1)*
+> - *Pizza (2)*
+> - *Pizza (3)*
+> - *Pizza (4)*
+> - *Pizza (5)*
+> - *Pizza (6)*
+> - *Pizza (7)*
+> - *Pizza (8)*
+> - *Pizza (9)*
+> - *Pizza (10)*
+> - *Pizza (11)*
 
 `$> 5`
 
@@ -90,3 +90,11 @@ To refund a favored substitutes, run the program and follow these instructions :
 > - *View on OpenFoodFacts : ...*
 
 The program exit after this
+
+### Manage Input Errors
+
+If you don't input a number, the program will print a message for you :
+> *You entered a letter, please enter a number.*
+
+If you enter a invalid number, the program will print a message for you :
+> *Please enter a valid number, from 1 to X*
