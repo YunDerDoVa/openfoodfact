@@ -12,14 +12,14 @@ To find substitutes, run the program and follow these instructions :
 
 *Choose a category :*
 
-*- Pizzas (1)*
-*- Pizzas (2)*
-*- Pizzas (3)*
-*- Pizzas (4)*
-*- Pizzas (5)*
-*- Pizzas (6)*
-*- Pizzas (7)*
-*- Pizzas (8)*
-*- Pizzas (9)*
-*- Pizzas (10)*
-*- Pizzas (11)*
+- *Pizzas (1)*
+- *Pizzas (2)*
+- *Pizzas (3)*
+- *Pizzas (4)*
+- *Pizzas (5)*
+- *Pizzas (6)*
+- *Pizzas (7)*
+- *Pizzas (8)*
+- *Pizzas (9)*
+- *Pizzas (10)*
+- *Pizzas (11)*
