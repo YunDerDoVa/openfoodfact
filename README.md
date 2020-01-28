@@ -98,3 +98,12 @@ If you don't input a number, the program will print a message for you :
 
 If you enter a invalid number, the program will print a message for you :
 > *Please enter a valid number, from 1 to X*
+
+### MySQL Research
+
+The program will research a substitute in a MySQL base. Please enable your
+server before to use this app.
+
+When you launch a research, the program will launch a short algorithm to find a
+substitute. You can view this algorithm in the source code, file *database.py*
+method *search_algorithm*
