@@ -2,6 +2,13 @@ import json
 import requests
 from pony.orm import *
 
+#from .models import Food
+
+MYSQL_HOST = 'localhost'
+MYSQL_USER = 'root'
+MYSQL_PASSWORD = ''
+MYSQL_DB = 'openfoodfacts'
+
 db = Database()
 
 class Food(db.Entity):
@@ -12,6 +19,7 @@ class Food(db.Entity):
     brands = Required(str)
     code = Required(str)
     nutriments = Required(Json)
+
 
 class OpenFoodFacts:
 
@@ -70,8 +78,8 @@ class OpenFoodFacts:
                 print('No')
 
 
-#db.bind(provider='sqlite', filename='database.sqlite', create_db=True)
-db.bind(provider='mysql', host='localhost', user='root', passwd='', db='openfoodfacts')
+db.bind(provider='mysql', host=MYSQL_HOST, user=MYSQL_USER,
+    passwd=MYSQL_PASSWORD, db=MYSQL_DB)
 db.generate_mapping(create_tables=True)
 
 openfoodfacts = OpenFoodFacts()
