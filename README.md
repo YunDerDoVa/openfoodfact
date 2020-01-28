@@ -7,48 +7,48 @@ Here is listed all functionalities of the program.
 ### Find Substitutes
 To find substitutes, run the program and follow these instructions :
 
-*Find substitutes (1) or go to the favori-list (2) ?*
+> *Find substitutes (1) or go to the favori-list (2) ?*
 
 `1`
 
-*Choose a category :*
-
-- *Pizzas (1)*
-- *Pizzas (2)*
-- *Pizzas (3)*
-- *Pizzas (4)*
-- *Pizzas (5)*
-- *Pizzas (6)*
-- *Pizzas (7)*
-- *Pizzas (8)*
-- *Pizzas (9)*
-- *Pizzas (10)*
-- *Pizzas (11)*
+> *Choose a category :*
+>
+> - *Pizzas (1)*
+> - *Pizzas (2)*
+> - *Pizzas (3)*
+> - *Pizzas (4)*
+> - *Pizzas (5)*
+> - *Pizzas (6)*
+> - *Pizzas (7)*
+> - *Pizzas (8)*
+> - *Pizzas (9)*
+> - *Pizzas (10)*
+> - *Pizzas (11)*
 
 `3`
 
-*Choose a food*
-
-- *Pizzas (1)*
-- *Pizzas (2)*
-- *Pizzas (3)*
-- *Pizzas (4)*
-- *Pizzas (5)*
-- *Pizzas (6)*
-- *Pizzas (7)*
-- *Pizzas (8)*
-- *Pizzas (9)*
-- *Pizzas (10)*
-- *Pizzas (11)*
+> *Choose a food*
+>
+> - *Pizzas (1)*
+> - *Pizzas (2)*
+> - *Pizzas (3)*
+> - *Pizzas (4)*
+> - *Pizzas (5)*
+> - *Pizzas (6)*
+> - *Pizzas (7)*
+> - *Pizzas (8)*
+> - *Pizzas (9)*
+> - *Pizzas (10)*
+> - *Pizzas (11)*
 
 `5`
 
-*We found a substitute for 5*
+> *We found a substitute for 5*
 
-*Name : ...*
+> *Name : ...*
 
-*Description : ...*
+> *Description : ...*
 
-*Brands : ...*
+> *Brands : ...*
 
-*View on OpenFoodFacts : ...*
+> *View on OpenFoodFacts : ...*
