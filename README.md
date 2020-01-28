@@ -9,7 +9,7 @@ To find substitutes, run the program and follow these instructions :
 
 > *Find substitutes (1) or go to the favori-list (2) ?*
 
-`1`
+$> `1`
 
 > *Choose a category :*
 >
@@ -25,7 +25,7 @@ To find substitutes, run the program and follow these instructions :
 > - *Pizzas (10)*
 > - *Pizzas (11)*
 
-`3`
+$> `3`
 
 > *Choose a food*
 >
@@ -41,14 +41,26 @@ To find substitutes, run the program and follow these instructions :
 > - *Pizzas (10)*
 > - *Pizzas (11)*
 
-`5`
+$> `5`
 
 > *We found a substitute for 5*
 >
-> *Name : ...*
+> - *Name : ...*
+> - *Description : ...*
+> - *Brands : ...*
+> - *View on OpenFoodFacts : ...*
 >
-> *Description : ...*
->
-> *Brands : ...*
->
-> *View on OpenFoodFacts : ...*
+> *Do you want to save this research ?*
+> - *No (0)*
+> - *Yes (1)*
+
+### Save Substitute
+
+When you are in the substitute's page, the program will propose you to save
+
+> *Do you want to save this research ?*
+> - *No (0)*
+> - *Yes (1)*
+
+You only have to press input `1` if you want to save. Program exit after this
+input
