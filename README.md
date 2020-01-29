@@ -114,6 +114,18 @@ method *search_algorithm*
 
 `git clone https://github.com/GoswaTech/openfoodfact.git`
 
-### 2 : Fill the database
+### 2 : Install MySQL
+
+### 3 : Create Database
+
+### 4 : Fill the database
+
+`cd openfoodfacts`
 
 `pipenv run python -m openfoodfacts fill_database`
+
+## Launch Program
+
+Launch your SQL server and go in the project root to use this command :
+
+`pipenv run python -m openfoodfacts`
