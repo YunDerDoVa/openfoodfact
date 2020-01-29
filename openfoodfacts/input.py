@@ -23,6 +23,6 @@ class Input:
         new_input = input(text + " ")
 
         if(self._validate(new_input, min, max)):
-            self.new_input = new_input
+            self.new_input = int(new_input)
         else:
             self.set_input(text, min, max)

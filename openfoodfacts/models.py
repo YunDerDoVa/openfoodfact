@@ -14,13 +14,16 @@ class Food(db.Entity):
     brands = Set('Brand')
     code = Required(str)
     nutriments = Required(Json)
-    favor = Optional('Favor')
+    favor = Optional(bool)
 
+    @db_session
     def print_infos(self):
+        brands = Brand.select(lambda b: self in b.foods)
+
         print("Name : " + self.name)
         print("Description : " + self.code)
         print("Brands :")
-        for brand in self.brands:
+        for brand in brands:
             print("\t- " + brand.name)
 
 class Category(db.Entity):
@@ -36,19 +39,6 @@ class Brand(db.Entity):
     id = PrimaryKey(int, auto=True)
     name = Required(str)
     foods = Set(Food)
-
-class Favor(db.Entity):
-    """ Favor Class is connected to food by a one-to-one relation. """
-
-    id = PrimaryKey(int, auto=True)
-    food = Required(Food)
-
-    def print_infos(self):
-        print("Name : " + self.food.name)
-        print("Description : " + self.food.code)
-        print("Brands :")
-        for brand in self.food.brands:
-            print("\t- " + brand.name)
 
 # Connect to database
 db.bind(provider='mysql', host=MYSQL_HOST, user=MYSQL_USER,
