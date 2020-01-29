@@ -1,21 +1,23 @@
-class Search:
-    def SearchCategories():
+class SearchProcess:
+    def __search_categories(self):
         pass
 
-    def PrintCategories(categories):
+    def __print_categories(self, categories):
         pass
 
-    def SearchFoods(category):
+    def __search_foods(self, category):
         pass
 
-    def PrintFoods(foods):
+    def __print_foods(self, foods):
         pass
 
-    def SearchSubstitute(food):
+    def __search_substitute(self, food):
         pass
 
-    def PrintSubstitute(food):
+    def __print_substitute(self, food):
         pass
 
-    def Save(food):
+    def __save(self, food):
         pass
+
+    def run(self):

@@ -1,6 +1,6 @@
 from .input import Input
 
-class Favor:
+class FavorProcess:
 
     def __init__(self):
         self.favors = self.__search_favors()
@@ -8,28 +8,29 @@ class Favor:
     def __search_favors(self):
         """ This method return a list of Favor. """
 
-        pass
+        return Favor.select()
 
     def __print_favors(self):
         """ This method print a list of Favor. """
 
-        pass
+        print('Your favored food :')
+        for i in range(len(self.favors)):
+            print(str(i) + ' - ' + self.favors.name)
 
     def __get_favor(self, id):
         """ This method return a Favor taking the argument of the Favor. """
 
-        pass
+        return self.favors[id]
 
     def __print_favor(self, favor):
         """ This method print a Favor. """
 
         favor.print_infos()
-        pass
 
     def __delete(self, favor):
         """ This method delete a Favor from the database. """
 
-        pass
+        favor.delete()
 
     def run(self):
         """ This method run the process to allow the user to find his favor. """
@@ -38,9 +39,9 @@ class Favor:
 
         self.__print_favors()
 
-        text = "Test"
+        text = "Enter the number of your favored food :"
         new_input = input_obj(text, 1, len(favors))
-        favor = self.get_favor(new_input)
+        favor = self.__get_favor(new_input)
 
         self.__print_favor(favor)
 

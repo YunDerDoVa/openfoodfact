@@ -2,6 +2,8 @@ import sys
 
 from .openfoodfacts import OpenFoodFacts
 from .input import Input
+from .favor import FavorProcess
+from .search import SearchProcess
 
 def check_argv():
     """ This function the arguments. If 'fill_database' is passed
@@ -21,11 +23,11 @@ def run_program():
     text = 'Find substitutes (1) or go to the favori-list (2) ?'
     input_obj.set_input(text, 1, 2)
     if(input_obj.new_input == 1):
-        search = Search()
-        search.run()
+        search_process = SearchProcess()
+        search_process.run()
     elif(input_obj.new_input == 2):
-        favor = Favor()
-        favor.run()
+        favor_process = FavorProcess()
+        favor_process.run()
 
 def main():
     check_argv()
