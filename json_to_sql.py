@@ -2,8 +2,6 @@ import json
 import requests
 from pony.orm import *
 
-#from .models import Food
-
 MYSQL_HOST = 'localhost'
 MYSQL_USER = 'root'
 MYSQL_PASSWORD = ''

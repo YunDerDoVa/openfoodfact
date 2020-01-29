@@ -107,3 +107,13 @@ server before to use this app.
 When you launch a research, the program will launch a short algorithm to find a
 substitute. You can view this algorithm in the source code, file *database.py*
 method *search_algorithm*
+
+## Installation
+
+### 1 : Clone the repo
+
+`git clone https://github.com/GoswaTech/openfoodfact.git`
+
+### 2 : Fill the database
+
+`pipenv run python -m openfoodfacts fill_database`
