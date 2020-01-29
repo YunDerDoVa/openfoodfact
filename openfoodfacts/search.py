@@ -42,7 +42,20 @@ class SearchProcess:
 
     @db_session
     def __search_substitute(self, food):
-        return food
+
+        substitutes = Food.select(lambda f: f != food)
+
+        list = []
+        power = 0
+
+        while(len(list) == 0):
+            power += 0.1
+            for substitute in substitutes:
+                if(substitute.test_substitute(food, power)):
+                    list.append(substitute)
+
+        print('Divergence power : ' + str(power))
+        return list[0]
 
     def __print_substitute(self, food):
         food.print_infos()

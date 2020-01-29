@@ -25,11 +25,6 @@ class FavorProcess:
         for i in range(len(self.favors)):
             print(str(i) + ' - ' + self.favors[i].name)
 
-    def __get_favor(self, id):
-        """ This method return a Favor taking the argument of the Favor. """
-
-        return self.favors[id]
-
     def __print_favor(self, favor):
         """ This method print a Favor. """
 
@@ -50,7 +45,7 @@ class FavorProcess:
 
         text = "Enter the number of your favored food :"
         input_obj.set_input(text, 0, len(self.favors))
-        favor = self.__get_favor(input_obj.new_input)
+        favor = self.favors[input_obj.new_input]
 
         self.__print_favor(favor)
 

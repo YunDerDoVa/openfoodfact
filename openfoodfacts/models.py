@@ -26,6 +26,25 @@ class Food(db.Entity):
         for brand in brands:
             print("\t- " + brand.name)
 
+    def test_substitute(self, food, power):
+        try:
+            fat = float(self.nutriments['fat']) - float(food.nutriments['fat'])
+            salt = float(self.nutriments['salt']) - float(food.nutriments['salt'])
+            energy = float(self.nutriments['energy']) - float(food.nutriments['energy'])
+            sodium = float(self.nutriments['sodium']) - float(food.nutriments['sodium'])
+            sugars = float(self.nutriments['sugars']) - float(food.nutriments['sugars'])
+            proteins = float(self.nutriments['proteins']) - float(food.nutriments['proteins'])
+        except:
+            return False
+
+        params = [fat, salt, energy, sodium, sugars, proteins]
+
+        for param in params:
+            if(param*param > power):
+                return False
+
+        return True
+
 class Category(db.Entity):
     """ Category Class is connected to food by a many-to-many relation. """
 

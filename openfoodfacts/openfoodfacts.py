@@ -17,6 +17,8 @@ class OpenFoodFacts:
         page = json.loads(r.text)
 
         number_of_pages = int(page['count']/page['page_size'])
+        if(number_of_pages > 50):
+            number_of_pages = 50
         if(settings.DEBUG):
             number_of_pages = 1
 
@@ -45,6 +47,8 @@ class OpenFoodFacts:
         except:
             return None
 
+        if(product['product_name'] == ''):
+            return None
         if(product['brands'] == ''):
             return None
 
@@ -57,10 +61,11 @@ class OpenFoodFacts:
 
         for brand_name in product['brands'].split(','):
             if(Brand.exists(name=brand_name)):
-                brand = Brand.select(lambda c: c.name == brand_name).first()
+                brand = Brand.select(lambda b: b.name == brand_name).first()
             else:
                 brand = Brand(name=brand_name)
-            brand.foods.add(food)
+            if(brand != None):
+                brand.foods.add(food)
 
         for category_name in product['categories_tags']:
             if(Category.exists(name=category_name)):
@@ -81,7 +86,7 @@ class OpenFoodFacts:
 
     @db_session
     def fill_database(self):
-        self.fetch_products_list(['pizzas', 'pies'])
+        self.fetch_products_list(['pizzas', 'pies', 'fruits', 'vegetables'])
 
         for index_product in range(len(self.products)):
             print(str(index_product+1) + '/' + str(len(self.products)))

@@ -1,4 +1,4 @@
-DEBUG = True
+DEBUG = False
 
 MYSQL_HOST = 'localhost'
 MYSQL_USER = 'root'
