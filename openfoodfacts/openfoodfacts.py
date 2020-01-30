@@ -14,22 +14,23 @@ class OpenFoodFacts:
     def __fetch_products(self, category):
         print('Fetching ' + category)
 
-        url = 'https://fr-en.openfoodfacts.org/category/'+category+'.json'
+        url = 'https://fr.openfoodfacts.org/categorie/'+category+'.json'
         r = requests.get(str(url))
         page = json.loads(r.text)
 
         number_of_pages = int(page['count']/page['page_size'])
-        if(number_of_pages > 50):
-            number_of_pages = 50
+        if(number_of_pages > 100):
+            number_of_pages = 100
         if(settings.DEBUG):
             number_of_pages = 1
 
         print(str(number_of_pages) + ' pages')
 
         for index_page in range(number_of_pages):
-            print('#####\npage ' + str(index_page+1) + '/' + str(number_of_pages))
+            print('##### ' + str(category))
+            print('##### page ' + str(index_page+1) + '/' + str(number_of_pages))
 
-            url = 'https://fr-en.openfoodfacts.org/category/'+category+'/'+str(index_page+1)+'.json'
+            url = 'https://fr.openfoodfacts.org/categorie/'+category+'/'+str(index_page+1)+'.json'
             r = requests.get(str(url))
             page = json.loads(r.text)
 
@@ -83,7 +84,7 @@ class OpenFoodFacts:
     @db_session
     def fill_database(self):
         # Fill products list
-        self.fetch_products_list(['pizzas', 'pies', 'fruits', 'vegetables', 'fresh-foods', 'chocolates', 'sugars'])
+        self.fetch_products_list(['fruits', 'legumes-et-derives', 'frais', 'sucres', 'boissons', 'viandes', 'laits'])
 
         # Convert products to Relationnals Entities
         for index_product in range(len(self.products)):
