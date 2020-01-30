@@ -92,11 +92,16 @@ class OpenFoodFacts:
             print(str(index_product+1) + '/' + str(len(self.products)))
             try:
                 food = self.get_food(index_product)
+                print('[get_food] Yes')
             except:
-                raise
+                print('[get_food] No')
 
             if(food != None):
                 self.foods.append(food)
-                print('Yes')
+                print('[append] Yes')
             else:
-                print('No')
+                print('[append] No')
+
+        for food in self.foods:
+            if(not food.test_food()):
+                food.delete()

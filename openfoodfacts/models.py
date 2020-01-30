@@ -1,5 +1,6 @@
 import sys
 from pony.orm import *
+import math
 
 from .settings import MYSQL_HOST, MYSQL_USER, MYSQL_PASSWORD, MYSQL_DB
 
@@ -38,12 +39,47 @@ class Food(db.Entity):
             return False
 
         params = [fat, salt, energy, sodium, sugars, proteins]
+        print("Params : " + params)
 
         for param in params:
             if(param*param > power):
                 return False
 
         return True
+
+    def find_substitue(self):
+        substitutes = Food.select(lambda f: f != self)
+        searching = False
+        counter = 0.0
+
+        if(not self.test_food()):
+            print('This food is not valid, here is your food stats.')
+            return self
+
+        while(searching):
+            counter += 0.1
+            power = math.exp(counter)
+            for substitute in substitutes:
+                if(substitute.test_substitute(self)):
+                    print('Divergence power : ' + str(power))
+                    return substitute
+
+            if(power > math.exp(100)):
+                print('No substitute found, here is your food stats.')
+                return self
+
+    def test_food(self):
+        try:
+            print('Fat : ' + str(float(self.nutriments['fat'])))
+            print('Salt : ' + str(float(self.nutriments['salt'])))
+            print('Energy : ' + str(float(self.nutriments['energy'])))
+            print('Sodium : ' + str(float(self.nutriments['sodium'])))
+            print('Sugars : ' + str(float(self.nutriments['sugars'])))
+            print('Proteins : ' + str(float(self.nutriments['proteins'])))
+            return True
+        except:
+            return False
+
 
 class Category(db.Entity):
     """ Category Class is connected to food by a many-to-many relation. """
