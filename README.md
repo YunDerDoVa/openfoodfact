@@ -105,8 +105,8 @@ The program will research a substitute in a MySQL base. Please enable your
 server before to use this app.
 
 When you launch a research, the program will launch a short algorithm to find a
-substitute. You can view this algorithm in the source code, file *database.py*
-method *search_algorithm*
+substitute. You can view this algorithm in the source code, file **models.py**
+method **search_algorithm**
 
 ## Installation
 

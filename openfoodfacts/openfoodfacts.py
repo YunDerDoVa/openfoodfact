@@ -12,6 +12,8 @@ class OpenFoodFacts:
         self.foods = []
 
     def __fetch_products(self, category):
+        print('Fetching ' + category)
+
         url = 'https://fr-en.openfoodfacts.org/category/'+category+'.json'
         r = requests.get(str(url))
         page = json.loads(r.text)
@@ -38,27 +40,21 @@ class OpenFoodFacts:
 
     def __product_to_food(self, product):
 
-        try:
-            name = product['product_name']
-            code = product['code']
-            nutriments = product['nutriments']
-            brands = product['brands']
-            categories = product['categories_tags']
-        except:
-            return None
+        # Test if json contains all required tags
+        name = product['product_name']
+        code = product['code']
+        nutriments = product['nutriments']
+        brands = product['brands']
+        categories = product['categories_tags']
 
-        if(product['product_name'] == ''):
-            return None
-        if(product['brands'] == ''):
-            return None
-
-        #Add
+        # Insert Food Entity in database
         food = Food(
             name=product['product_name'],
             code=product['code'],
             nutriments=product['nutriments'],
         )
 
+        #
         for brand_name in product['brands'].split(','):
             if(Brand.exists(name=brand_name)):
                 brand = Brand.select(lambda b: b.name == brand_name).first()
@@ -86,22 +82,50 @@ class OpenFoodFacts:
 
     @db_session
     def fill_database(self):
-        self.fetch_products_list(['pizzas', 'pies', 'fruits', 'vegetables'])
+        # Fill products list
+        self.fetch_products_list(['pizzas', 'pies', 'fruits', 'vegetables', 'fresh-foods', 'chocolates', 'sugars'])
 
+        # Convert products to Relationnals Entities
         for index_product in range(len(self.products)):
-            print(str(index_product+1) + '/' + str(len(self.products)))
+            print('Food ' + str(index_product+1) + '/' + str(len(self.products)))
+
             try:
                 food = self.get_food(index_product)
-                print('[get_food] Yes')
-            except:
-                print('[get_food] No')
-
-            if(food != None):
                 self.foods.append(food)
-                print('[append] Yes')
-            else:
-                print('[append] No')
+                print('[get_food] Success')
+            except:
+                print('[get_food] Error')
 
-        for food in self.foods:
+        self.wash_foods()
+        self.wash_categories()
+        self.wash_brands()
+
+    def wash_foods(self):
+
+        # Wash Food Entities
+        for food in Food.select():
             if(not food.test_food()):
                 food.delete()
+                print('Food deleted')
+            elif(len(Food.select(lambda f: f.code == food.code)) > 1):
+                food.delete()
+                print('Food deleted')
+            elif(len(food.brands) == 0):
+                food.delete()
+                print('Food deleted')
+
+    def wash_categories(self):
+
+        # Wash Category Entities
+        for category in Category.select():
+            if(len(category.foods) == 0):
+                category.delete()
+                print('Category deleted')
+
+    def wash_brands(self):
+
+        # Wash Brand Entities
+        for brand in Brand.select():
+            if(len(brand.foods) == 0):
+                brand.delete()
+                print('Brand deleted')

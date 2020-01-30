@@ -39,7 +39,6 @@ class Food(db.Entity):
             return False
 
         params = [fat, salt, energy, sodium, sugars, proteins]
-        print("Params : " + params)
 
         for param in params:
             if(param*param > power):
@@ -49,7 +48,7 @@ class Food(db.Entity):
 
     def find_substitue(self):
         substitutes = Food.select(lambda f: f != self)
-        searching = False
+        searching = True
         counter = 0.0
 
         if(not self.test_food()):
@@ -60,7 +59,7 @@ class Food(db.Entity):
             counter += 0.1
             power = math.exp(counter)
             for substitute in substitutes:
-                if(substitute.test_substitute(self)):
+                if(substitute.test_substitute(self, power)):
                     print('Divergence power : ' + str(power))
                     return substitute
 
@@ -70,12 +69,12 @@ class Food(db.Entity):
 
     def test_food(self):
         try:
-            print('Fat : ' + str(float(self.nutriments['fat'])))
-            print('Salt : ' + str(float(self.nutriments['salt'])))
-            print('Energy : ' + str(float(self.nutriments['energy'])))
-            print('Sodium : ' + str(float(self.nutriments['sodium'])))
-            print('Sugars : ' + str(float(self.nutriments['sugars'])))
-            print('Proteins : ' + str(float(self.nutriments['proteins'])))
+            var = 'Fat : ' + str(float(self.nutriments['fat']))
+            var = 'Salt : ' + str(float(self.nutriments['salt']))
+            var = 'Energy : ' + str(float(self.nutriments['energy']))
+            var = 'Sodium : ' + str(float(self.nutriments['sodium']))
+            var = 'Sugars : ' + str(float(self.nutriments['sugars']))
+            var = 'Proteins : ' + str(float(self.nutriments['proteins']))
             return True
         except:
             return False

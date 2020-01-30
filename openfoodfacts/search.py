@@ -38,7 +38,7 @@ class SearchProcess:
     def __print_foods(self, foods):
         print("Choose a food :")
         for i in range(len(foods)):
-            print(str(i) + ' - ' + foods[i].name)
+            print(str(i) + ' - ' + foods[i].name + '(' + foods[i].code + ')')
 
     @db_session
     def __search_substitute(self, food):
@@ -46,7 +46,7 @@ class SearchProcess:
         return food.find_substitue()
 
     def __print_substitute(self, food):
-        
+
         food.print_infos()
 
     @db_session
