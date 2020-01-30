@@ -19,8 +19,8 @@ class OpenFoodFacts:
         page = json.loads(r.text)
 
         number_of_pages = int(page['count']/page['page_size'])
-        #if(number_of_pages > 50):
-        #    number_of_pages = 50
+        if(number_of_pages > 50):
+            number_of_pages = 50
         if(settings.DEBUG):
             number_of_pages = 1
 

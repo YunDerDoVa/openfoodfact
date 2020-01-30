@@ -27,9 +27,6 @@ class Food(db.Entity):
         print("Brands :")
         for brand in brands:
             print("\t- " + brand.name)
-        print("Nutriments :\n")
-        for key in self.nutriments.keys():
-            print(str(key) + " - " + str(self.nutriments[key]))
 
     def test_substitute(self, food, power):
 

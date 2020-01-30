@@ -11,15 +11,14 @@ class Algorythm:
     @staticmethod
     def get_nutriments_data(food):
         data = [
-            float(food.nutriments['fat_100g']),
-            float(food.nutriments['salt_100g']),
+            float(food.nutriments['fat']),
+            float(food.nutriments['salt']),
             float(food.nutriments['energy_100g']),
-            float(food.nutriments['sodium_100g']),
-            float(food.nutriments['sugars_100g']),
+            float(food.nutriments['sodium']),
+            float(food.nutriments['sugars']),
             float(food.nutriments['proteins_100g']),
-            float(food.nutriments['fiber_100g']),
+            float(food.nutriments['fiber']),
             float(food.nutriments['carbohydrates_100g']),
-            float(food.nutriments['satured-fat_100g']),
             float(food.nutriments['nutrition-score-fr_100g']),
         ]
 
