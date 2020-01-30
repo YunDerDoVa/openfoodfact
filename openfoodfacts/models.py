@@ -3,6 +3,7 @@ from pony.orm import *
 import math
 
 from .settings import MYSQL_HOST, MYSQL_USER, MYSQL_PASSWORD, MYSQL_DB
+from .algorythm import Algorythm
 
 db = Database()
 
@@ -26,25 +27,18 @@ class Food(db.Entity):
         print("Brands :")
         for brand in brands:
             print("\t- " + brand.name)
+        print("Nutriments :\n")
+        for key in self.nutriments.keys():
+            print(str(key) + " - " + str(self.nutriments[key]))
 
     def test_substitute(self, food, power):
-        try:
-            fat = float(self.nutriments['fat']) - float(food.nutriments['fat'])
-            salt = float(self.nutriments['salt']) - float(food.nutriments['salt'])
-            energy = float(self.nutriments['energy']) - float(food.nutriments['energy'])
-            sodium = float(self.nutriments['sodium']) - float(food.nutriments['sodium'])
-            sugars = float(self.nutriments['sugars']) - float(food.nutriments['sugars'])
-            proteins = float(self.nutriments['proteins']) - float(food.nutriments['proteins'])
-        except:
+
+        algorythm = Algorythm(self, food)
+
+        if(algorythm.get_score() > power):
             return False
-
-        params = [fat, salt, energy, sodium, sugars, proteins]
-
-        for param in params:
-            if(param*param > power):
-                return False
-
-        return True
+        else:
+            return True
 
     def find_substitue(self):
         substitutes = Food.select(lambda f: f != self)
@@ -69,12 +63,7 @@ class Food(db.Entity):
 
     def test_food(self):
         try:
-            var = 'Fat : ' + str(float(self.nutriments['fat']))
-            var = 'Salt : ' + str(float(self.nutriments['salt']))
-            var = 'Energy : ' + str(float(self.nutriments['energy']))
-            var = 'Sodium : ' + str(float(self.nutriments['sodium']))
-            var = 'Sugars : ' + str(float(self.nutriments['sugars']))
-            var = 'Proteins : ' + str(float(self.nutriments['proteins']))
+            Algorythm.get_nutriments_data(self)
             return True
         except:
             return False
