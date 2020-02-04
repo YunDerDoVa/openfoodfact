@@ -7,11 +7,15 @@ from . import settings
 
 
 class ProductDownloader:
+    """ This class download products form the openfoodfacts api. """
 
     def __init__(self):
+        """ Initialise products list """
         self.products = []
 
     def __fetch_products(self, category):
+        """ Get all products from the openfoodfacts api. """
+
         print("Fetching " + category)
 
         url = "https://fr.openfoodfacts.org/categorie/" + category + ".json"
@@ -56,6 +60,10 @@ class ProductDownloader:
                 self.products.append(page["products"][index_page_product])
 
     def fetch_products_list(self, list):
+        """ Take a list of categories in argument.
+        Launch __fetch_products(category) method for each category in the
+        list and return the internal list of products """
+
         for name in list:
             self.__fetch_products(name)
 
@@ -63,11 +71,12 @@ class ProductDownloader:
 
 
 class DBWasher:
+    """ This class wash the database. """
 
     @db_session
     def wash_foods(self):
+        """ Wash Food Entities """
 
-        # Wash Food Entities
         for food in Food.select():
             if not food.test_food():
                 food.delete()
@@ -81,8 +90,8 @@ class DBWasher:
 
     @db_session
     def wash_categories(self):
+        """ Wash Category Entities """
 
-        # Wash Category Entities
         for category in Category.select():
             if len(category.foods) == 0:
                 category.delete()
@@ -90,8 +99,8 @@ class DBWasher:
 
     @db_session
     def wash_brands(self):
+        """ Wash Brand Entities """
 
-        # Wash Brand Entities
         for brand in Brand.select():
             if len(brand.foods) == 0:
                 brand.delete()
@@ -99,25 +108,28 @@ class DBWasher:
 
 
 class DBFiller:
+    """ This class is specialised to fill the database """
 
     @db_session
-    def __product_to_food(self, product):
+    def insert_food_from_product(self, product):
+        """ Cast product (object from openfoodfacts json) to a Food Entity and
+        insert this Entity in the database. This method is made of 5 steps : """
 
-        # Test if json contains all required tags
+        """ 1. Get all necessaries tags """
         name = product["product_name"]
         code = product["code"]
         nutriments = product["nutriments"]
         brands = product["brands"]
         categories = product["categories_tags"]
 
-        # Insert Food Entity in database
+        """2.  Insert Food Entity in database """
         food = Food(
             name=product["product_name"],
             code=product["code"],
             nutriments=product["nutriments"],
         )
 
-        #
+        """ 3. Insert Brand if it don't exists and link this Brand to the Food """
         for brand_name in product["brands"].split(","):
             if Brand.exists(name=brand_name):
                 brand = Brand.select(lambda b: b.name == brand_name).first()
@@ -126,6 +138,7 @@ class DBFiller:
             if brand != None:
                 brand.foods.add(food)
 
+        """ 4. Insert Category if it don't exists and link it to the Food """
         for category_name in product["categories_tags"]:
             if Category.exists(name=category_name):
                 category = Category.select(
@@ -135,16 +148,16 @@ class DBFiller:
                 category = Category(name=category_name)
             category.foods.add(food)
 
+        """ 5. Commit Entities """
         commit()
-        return food
-
-    def insert_food_from_product(self, product):
-        return self.__product_to_food(product)
 
 
 class OpenFoodFacts:
+    """ This class set the database up before the using of the program. """
 
     def fill_database(self):
+        """ It fill the database with some categories of food """
+
         # Fill products list
         downloader = ProductDownloader()
         products = downloader.fetch_products_list(
