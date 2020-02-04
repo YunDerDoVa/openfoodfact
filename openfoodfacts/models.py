@@ -1,17 +1,15 @@
 import sys
-
-# -tc- éviter l'étoile et trier/formater correctement les imports
-from pony.orm import *
 import math
 
-# -tc- Parfait, un fichier de settings a été finalement créé
+from pony.orm import Database, db_session
+from pony.orm import PrimaryKey, Required, Set, Optional, Json
+
 from .settings import MYSQL_HOST, MYSQL_USER, MYSQL_PASSWORD, MYSQL_DB
 from .algorythm import Algorythm
 
+
 db = Database()
 
-# -tc- tu définis ton modèle catégorie à deux endroits?
-# -tc- quelle différence avec ce qui est défini dans json_to_sql.py?
 class Food(db.Entity):
     """ Food Class contains the data of openfoodfacts """
 

@@ -6,6 +6,8 @@ from .models import Food
 class FavorProcess:
 
     def __init__(self):
+        """ Init this class by getting all favors """
+
         self.favors = self.__search_favors()
 
     @db_session

@@ -33,8 +33,10 @@ def run_program():
         favor_process.run()
 
 
-# -tc- ajouter une docstring à main()
 def main():
+    """ Main function check the passed arguments and run the program
+    normally """
+
     check_argv()
     run_program()
 
