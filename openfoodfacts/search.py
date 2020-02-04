@@ -1,5 +1,3 @@
-# -tc- module à documenter
-
 from pony.orm import db_session, commit
 
 from .input import Input
@@ -7,12 +5,13 @@ from .models import Category, Food, Brand
 
 
 class SearchProcess:
-    def __init__(self):
-        self.categories = self.__search_categories()
-        self.foods = []
+    """ This process is launched when the user want to search a new
+    substitute """
 
     @db_session
     def __search_categories(self):
+        """ Return all cateogries """
+
         list = []
 
         for category in Category.select():
@@ -20,14 +19,17 @@ class SearchProcess:
 
         return list
 
-    def __print_categories(self):
+    def __print_categories(self, categories):
+        """ Print the categories with the id number to allow the interaction
+        with the user """
+
         print("Choose a category :")
-        for i in range(len(self.categories)):
-            print(str(i) + " - " + self.categories[i].name)
+        for i in range(len(categories)):
+            print(str(i) + " - " + categories[i].name)
 
     @db_session
-    def __search_foods(self, id):
-        category = self.categories[id]
+    def __search_foods(self, category):
+        """ Return all foods containing the choosen category """
 
         list = []
 
@@ -37,34 +39,47 @@ class SearchProcess:
         return list
 
     def __print_foods(self, foods):
+        """ Print the foods with the id number to allow the interaction with
+        the user """
+
         print("Choose a food :")
         for i in range(len(foods)):
             print(str(i) + " - " + foods[i].name)
 
     @db_session
     def __search_substitute(self, food):
+        """ Return a substitute of the choosed food """
 
         return food.find_substitue()
 
     def __print_substitute(self, food):
+        """ Print food infos """
 
         food.print_infos()
 
     @db_session
     def __save(self, food):
+        """ Save choosen food in favor """
+
         Food[food.id].favor = True
         commit()
 
     def run(self):
+        """ Run searching processus and interactions """
+
         input_obj = Input()
 
+        # Get categories
+        categories = self.__search_categories()
+
         # Ask for category
-        self.__print_categories()
+        self.__print_categories(categories)
         text = "Enter the number of your choosen category :"
-        input_obj.set_input(text, 0, len(self.categories))
+        input_obj.set_input(text, 0, len(categories))
 
         # Get foods
-        foods = self.__search_foods(input_obj.new_input)
+        category = categories[input_obj.new_input]
+        foods = self.__search_foods(category)
 
         # Ask for food
         self.__print_foods(foods)
