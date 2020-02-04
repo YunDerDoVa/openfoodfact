@@ -1,3 +1,13 @@
+# -tc- Attention à définir des docstrings de module, de classe, de méthode et
+# -tc- de fonction. Dans ce projet en doc-driven development, tu es supposé
+# -tc- écrire les docstrings avant d'implémenter les méthodes!!!
+
+# -tc- Une même classe ne devrait pas à la fois se charger de télécharger
+# -tc- les données sur l'API, de les nettoyer et des les insérer en base.
+# -tc- Concevoir des classes séparées pour chacune de ces responsabilités.
+# -tc- Une classe == une responsabilité
+
+# trier/formater correctement les imports
 from pony.orm import db_session, commit
 import json
 import requests
@@ -5,68 +15,86 @@ import requests
 from .models import Food, Category, Brand
 from . import settings
 
-class OpenFoodFacts:
 
+class OpenFoodFacts:
     def __init__(self):
         self.products = []
         self.foods = []
 
     def __fetch_products(self, category):
-        print('Fetching ' + category)
+        print("Fetching " + category)
 
-        url = 'https://fr.openfoodfacts.org/categorie/'+category+'.json'
+        url = "https://fr.openfoodfacts.org/categorie/" + category + ".json"
         r = requests.get(str(url))
         page = json.loads(r.text)
 
-        number_of_pages = int(page['count']/page['page_size'])
-        if(number_of_pages > 100):
+        number_of_pages = int(page["count"] / page["page_size"])
+        if number_of_pages > 100:
             number_of_pages = 100
-        if(settings.DEBUG):
+        if settings.DEBUG:
             number_of_pages = 1
 
-        print(str(number_of_pages) + ' pages')
+        print(str(number_of_pages) + " pages")
 
         for index_page in range(number_of_pages):
-            print('##### ' + str(category))
-            print('##### page ' + str(index_page+1) + '/' + str(number_of_pages))
+            print("##### " + str(category))
+            print(
+                "##### page "
+                + str(index_page + 1)
+                + "/"
+                + str(number_of_pages)
+            )
 
-            url = 'https://fr.openfoodfacts.org/categorie/'+category+'/'+str(index_page+1)+'.json'
+            url = (
+                "https://fr.openfoodfacts.org/categorie/"
+                + category
+                + "/"
+                + str(index_page + 1)
+                + ".json"
+            )
             r = requests.get(str(url))
             page = json.loads(r.text)
 
-            for index_page_product in range(page['page_size']):
-                print('product ' + str(index_page_product+1) + '/' + str(page['page_size']))
+            for index_page_product in range(page["page_size"]):
+                print(
+                    "product "
+                    + str(index_page_product + 1)
+                    + "/"
+                    + str(page["page_size"])
+                )
 
-                self.products.append(page['products'][index_page_product])
+                self.products.append(page["products"][index_page_product])
 
     def __product_to_food(self, product):
 
         # Test if json contains all required tags
-        name = product['product_name']
-        code = product['code']
-        nutriments = product['nutriments']
-        brands = product['brands']
-        categories = product['categories_tags']
+        name = product["product_name"]
+        code = product["code"]
+        nutriments = product["nutriments"]
+        brands = product["brands"]
+        categories = product["categories_tags"]
 
         # Insert Food Entity in database
         food = Food(
-            name=product['product_name'],
-            code=product['code'],
-            nutriments=product['nutriments'],
+            name=product["product_name"],
+            code=product["code"],
+            nutriments=product["nutriments"],
         )
 
         #
-        for brand_name in product['brands'].split(','):
-            if(Brand.exists(name=brand_name)):
+        for brand_name in product["brands"].split(","):
+            if Brand.exists(name=brand_name):
                 brand = Brand.select(lambda b: b.name == brand_name).first()
             else:
                 brand = Brand(name=brand_name)
-            if(brand != None):
+            if brand != None:
                 brand.foods.add(food)
 
-        for category_name in product['categories_tags']:
-            if(Category.exists(name=category_name)):
-                category = Category.select(lambda c: c.name == category_name).first()
+        for category_name in product["categories_tags"]:
+            if Category.exists(name=category_name):
+                category = Category.select(
+                    lambda c: c.name == category_name
+                ).first()
             else:
                 category = Category(name=category_name)
             category.foods.add(food)
@@ -84,18 +112,33 @@ class OpenFoodFacts:
     @db_session
     def fill_database(self):
         # Fill products list
-        self.fetch_products_list(['fruits', 'legumes-et-derives', 'frais', 'sucres', 'boissons', 'viandes', 'laits'])
+        self.fetch_products_list(
+            [
+                "fruits",
+                "legumes-et-derives",
+                "frais",
+                "sucres",
+                "boissons",
+                "viandes",
+                "laits",
+            ]
+        )
 
         # Convert products to Relationnals Entities
         for index_product in range(len(self.products)):
-            print('Food ' + str(index_product+1) + '/' + str(len(self.products)))
+            print(
+                "Food "
+                + str(index_product + 1)
+                + "/"
+                + str(len(self.products))
+            )
 
             try:
                 food = self.get_food(index_product)
                 self.foods.append(food)
-                print('[get_food] Success')
+                print("[get_food] Success")
             except:
-                print('[get_food] Error')
+                print("[get_food] Error")
 
         self.wash_foods()
         self.wash_categories()
@@ -105,28 +148,28 @@ class OpenFoodFacts:
 
         # Wash Food Entities
         for food in Food.select():
-            if(not food.test_food()):
+            if not food.test_food():
                 food.delete()
-                print('Food deleted')
-            elif(len(Food.select(lambda f: f.code == food.code)) > 1):
+                print("Food deleted")
+            elif len(Food.select(lambda f: f.code == food.code)) > 1:
                 food.delete()
-                print('Food deleted')
-            elif(len(food.brands) == 0):
+                print("Food deleted")
+            elif len(food.brands) == 0:
                 food.delete()
-                print('Food deleted')
+                print("Food deleted")
 
     def wash_categories(self):
 
         # Wash Category Entities
         for category in Category.select():
-            if(len(category.foods) == 0):
+            if len(category.foods) == 0:
                 category.delete()
-                print('Category deleted')
+                print("Category deleted")
 
     def wash_brands(self):
 
         # Wash Brand Entities
         for brand in Brand.select():
-            if(len(brand.foods) == 0):
+            if len(brand.foods) == 0:
                 brand.delete()
-                print('Brand deleted')
+                print("Brand deleted")

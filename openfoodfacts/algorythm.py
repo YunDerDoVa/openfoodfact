@@ -1,4 +1,12 @@
+# -tc- algorithm s'écrit avec un i
+
+# -tc- documenter le code à l'aide de docstrings au niveau module, classe,
+# -tc- méthode et fonction
 import math
+
+# -tc- pas convaincu par l'algorithme. Je me réjouis de discuter les résultats
+# -tc- en session
+
 
 class Algorythm:
 
@@ -11,22 +19,22 @@ class Algorythm:
     @staticmethod
     def get_nutriments_data(food):
         data = [
-            float(food.nutriments['fat']),
-            float(food.nutriments['salt']),
-            float(food.nutriments['energy_100g']),
-            float(food.nutriments['sodium']),
-            float(food.nutriments['sugars']),
-            float(food.nutriments['proteins_100g']),
-            float(food.nutriments['fiber']),
-            float(food.nutriments['carbohydrates_100g']),
-            float(food.nutriments['nutrition-score-fr_100g']),
+            float(food.nutriments["fat"]),
+            float(food.nutriments["salt"]),
+            float(food.nutriments["energy_100g"]),
+            float(food.nutriments["sodium"]),
+            float(food.nutriments["sugars"]),
+            float(food.nutriments["proteins_100g"]),
+            float(food.nutriments["fiber"]),
+            float(food.nutriments["carbohydrates_100g"]),
+            float(food.nutriments["nutrition-score-fr_100g"]),
         ]
 
         return data
 
     def compare_datas(self):
 
-        #print("Comparing\n" + str(self.nutriments_data_1) + "\nand\n" + str(self.nutriments_data_2))
+        # print("Comparing\n" + str(self.nutriments_data_1) + "\nand\n" + str(self.nutriments_data_2))
 
         list = []
 
@@ -40,6 +48,6 @@ class Algorythm:
         score = 0
 
         for num in self.compare_datas():
-            score += num*num
+            score += num * num
 
         return score

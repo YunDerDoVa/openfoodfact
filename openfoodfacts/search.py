@@ -1,3 +1,5 @@
+# -tc- module à documenter
+
 from pony.orm import db_session, commit
 
 from .input import Input
@@ -5,7 +7,6 @@ from .models import Category, Food, Brand
 
 
 class SearchProcess:
-
     def __init__(self):
         self.categories = self.__search_categories()
         self.foods = []
@@ -22,7 +23,7 @@ class SearchProcess:
     def __print_categories(self):
         print("Choose a category :")
         for i in range(len(self.categories)):
-            print(str(i) + ' - ' + self.categories[i].name)
+            print(str(i) + " - " + self.categories[i].name)
 
     @db_session
     def __search_foods(self, id):
@@ -38,7 +39,7 @@ class SearchProcess:
     def __print_foods(self, foods):
         print("Choose a food :")
         for i in range(len(foods)):
-            print(str(i) + ' - ' + foods[i].name)
+            print(str(i) + " - " + foods[i].name)
 
     @db_session
     def __search_substitute(self, food):
@@ -80,5 +81,5 @@ class SearchProcess:
         input_obj.set_input(text, 0, 1)
 
         # Save
-        if(input_obj.new_input == 1):
+        if input_obj.new_input == 1:
             self.__save(substitute)
