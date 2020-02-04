@@ -1,25 +1,15 @@
-# -tc- Attention à définir des docstrings de module, de classe, de méthode et
-# -tc- de fonction. Dans ce projet en doc-driven development, tu es supposé
-# -tc- écrire les docstrings avant d'implémenter les méthodes!!!
-
-# -tc- Une même classe ne devrait pas à la fois se charger de télécharger
-# -tc- les données sur l'API, de les nettoyer et des les insérer en base.
-# -tc- Concevoir des classes séparées pour chacune de ces responsabilités.
-# -tc- Une classe == une responsabilité
-
-# trier/formater correctement les imports
-from pony.orm import db_session, commit
 import json
 import requests
+from pony.orm import db_session, commit
 
 from .models import Food, Category, Brand
 from . import settings
 
 
-class OpenFoodFacts:
+class ProductDownloader:
+
     def __init__(self):
         self.products = []
-        self.foods = []
 
     def __fetch_products(self, category):
         print("Fetching " + category)
@@ -65,6 +55,52 @@ class OpenFoodFacts:
 
                 self.products.append(page["products"][index_page_product])
 
+    def fetch_products_list(self, list):
+        for name in list:
+            self.__fetch_products(name)
+
+        return self.products
+
+
+class DBWasher:
+
+    @db_session
+    def wash_foods(self):
+
+        # Wash Food Entities
+        for food in Food.select():
+            if not food.test_food():
+                food.delete()
+                print("Food deleted")
+            elif len(Food.select(lambda f: f.code == food.code)) > 1:
+                food.delete()
+                print("Food deleted")
+            elif len(food.brands) == 0:
+                food.delete()
+                print("Food deleted")
+
+    @db_session
+    def wash_categories(self):
+
+        # Wash Category Entities
+        for category in Category.select():
+            if len(category.foods) == 0:
+                category.delete()
+                print("Category deleted")
+
+    @db_session
+    def wash_brands(self):
+
+        # Wash Brand Entities
+        for brand in Brand.select():
+            if len(brand.foods) == 0:
+                brand.delete()
+                print("Brand deleted")
+
+
+class DBFiller:
+
+    @db_session
     def __product_to_food(self, product):
 
         # Test if json contains all required tags
@@ -102,74 +138,45 @@ class OpenFoodFacts:
         commit()
         return food
 
-    def get_food(self, id):
-        return self.__product_to_food(self.products[id])
+    def insert_food_from_product(self, product):
+        return self.__product_to_food(product)
 
-    def fetch_products_list(self, list):
-        for name in list:
-            self.__fetch_products(name)
 
-    @db_session
+class OpenFoodFacts:
+
     def fill_database(self):
         # Fill products list
-        self.fetch_products_list(
+        downloader = ProductDownloader()
+        products = downloader.fetch_products_list(
             [
                 "fruits",
                 "legumes-et-derives",
-                "frais",
-                "sucres",
-                "boissons",
-                "viandes",
-                "laits",
+#                "frais",
+#                "sucres",
+#                "boissons",
+#                "viandes",
+#                "laits",
             ]
         )
 
         # Convert products to Relationnals Entities
-        for index_product in range(len(self.products)):
+        filler = DBFiller()
+        for index_product in range(len(products)):
             print(
                 "Food "
                 + str(index_product + 1)
                 + "/"
-                + str(len(self.products))
+                + str(len(products))
             )
 
             try:
-                food = self.get_food(index_product)
-                self.foods.append(food)
-                print("[get_food] Success")
+                filler.insert_food_from_product(products[index_product])
+                print("[insert_food_from_product] Success")
             except:
-                print("[get_food] Error")
+                print("[insert_food_from_product] Error")
 
-        self.wash_foods()
-        self.wash_categories()
-        self.wash_brands()
-
-    def wash_foods(self):
-
-        # Wash Food Entities
-        for food in Food.select():
-            if not food.test_food():
-                food.delete()
-                print("Food deleted")
-            elif len(Food.select(lambda f: f.code == food.code)) > 1:
-                food.delete()
-                print("Food deleted")
-            elif len(food.brands) == 0:
-                food.delete()
-                print("Food deleted")
-
-    def wash_categories(self):
-
-        # Wash Category Entities
-        for category in Category.select():
-            if len(category.foods) == 0:
-                category.delete()
-                print("Category deleted")
-
-    def wash_brands(self):
-
-        # Wash Brand Entities
-        for brand in Brand.select():
-            if len(brand.foods) == 0:
-                brand.delete()
-                print("Brand deleted")
+        # Wash Database
+        washer = DBWasher()
+        washer.wash_foods()
+        washer.wash_categories()
+        washer.wash_brands()
