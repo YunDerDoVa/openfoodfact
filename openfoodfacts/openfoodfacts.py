@@ -2,7 +2,7 @@ import json
 import requests
 from pony.orm import db_session, commit
 
-from .models import Food, Category, Brand
+from .models import Food, Category, Brand, Store
 from . import settings
 
 
@@ -32,7 +32,7 @@ class ProductDownloader:
         page = json.loads(r.text)
 
         # Define page size
-        page_size = 500
+        page_size = 1000
 
         # Calcul number of pages
         number_of_pages = int(int(page["count"]) / page_size)
@@ -119,6 +119,15 @@ class DBWasher:
                 brand.delete()
                 print("Brand deleted")
 
+    @db_session
+    def wash_stores(self):
+        """ Wash Store Entities """
+
+        for store in Store.select():
+            if len(store.foods) == 0:
+                store.delete()
+                print("Store deleted")
+
 
 class DBFiller:
     """ This class is specialised to fill the database """
@@ -126,7 +135,7 @@ class DBFiller:
     @db_session
     def insert_food_from_product(self, product):
         """ Cast product (object from openfoodfacts json) to a Food Entity and
-        insert this Entity in the database. This method is made of 5 steps : """
+        insert this Entity in the database. This method is made of 6 steps : """
 
         """ 1. Get all necessaries tags """
         name = product["product_name"]
@@ -217,3 +226,4 @@ class OpenFoodFacts:
         washer.wash_foods()
         washer.wash_categories()
         washer.wash_brands()
+        washer.wash_stores()
