@@ -55,13 +55,14 @@ class SearchProcess:
     def __print_substitute(self, food):
         """ Print food infos """
 
+        print("#########################")
         food.print_infos()
 
     @db_session
-    def __save(self, food):
+    def __save(self, food, substitute):
         """ Save choosen food in favor """
 
-        Food[food.id].favor = True
+        Food[food.id].substitutes.add(Food[substitute.id])
         commit()
 
     def run(self):
@@ -97,4 +98,4 @@ class SearchProcess:
 
         # Save
         if input_obj.new_input == 1:
-            self.__save(substitute)
+            self.__save(food, substitute)

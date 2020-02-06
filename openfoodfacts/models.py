@@ -1,5 +1,6 @@
 import sys
 import math
+import random
 
 from pony.orm import Database, db_session
 from pony.orm import PrimaryKey, Required, Set, Optional, Json
@@ -17,22 +18,27 @@ class Food(db.Entity):
     name = Required(str)
     categories = Set("Category")
     brands = Set("Brand")
+    stores = Set("Store")
     code = Required(str)
     nutriments = Required(Json)
-    favor = Optional(bool)
+    substitute_of = Optional('Food', reverse='substitutes')
+    substitutes = Set('Food', reverse='substitute_of')
 
-    # -tc- Pourquoi ne pas utiliser de méthode __str__ ici?
-    # -tc- Ajouter des docstrings dans les méthodes ci-dessous ainsi qu'au
-    # -tc- niveau du module et de la classe
     @db_session
     def print_infos(self):
         brands = Brand.select(lambda b: self in b.foods)
+        stores = Store.select(lambda s: self in s.foods)
 
-        print("Name : " + self.name)
-        print("Description : " + self.code)
-        print("Brands :")
+        print("##### Name : " + self.name)
+        print("##### Link : https://world.openfoodfacts.org/product/" + self.code)
+        print("##### Brands :")
         for brand in brands:
-            print("\t- " + brand.name)
+            print("##### \t- " + brand.name)
+        if len(stores) > 0:
+            print("Stores :")
+            for store in stores:
+                print("##### \t- " + store.name)
+        print("#########################\n")
 
     def test_substitute(self, food, power):
 
@@ -47,6 +53,7 @@ class Food(db.Entity):
         substitutes = Food.select(lambda f: f != self)
         searching = True
         counter = 0.0
+        match_list = []
 
         if not self.test_food():
             print("This food is not valid, here is your food stats.")
@@ -55,10 +62,16 @@ class Food(db.Entity):
         while searching:
             counter += 0.1
             power = math.exp(counter)
+
             for substitute in substitutes:
-                if substitute.test_substitute(self, power):
-                    print("Divergence power : " + str(power))
-                    return substitute
+                if substitute not in Food[self.id].substitutes:
+                    if self.test_substitute(substitute, power):
+                        print("Divergence power : " + str(power))
+                        match_list.append(substitute)
+
+            if len(match_list) > 0:
+                print(str(len(match_list)) + ' substitutes found...')
+                return match_list[int(random.random() * (len(match_list)-1))]
 
             if power > math.exp(100):
                 print("No substitute found, here is your food stats.")
@@ -82,6 +95,14 @@ class Category(db.Entity):
 
 class Brand(db.Entity):
     """ Brand Class is connected to food by a many-to-many relation. """
+
+    id = PrimaryKey(int, auto=True)
+    name = Required(str)
+    foods = Set(Food)
+
+
+class Store(db.Entity):
+    """ Store Class is connected to food by a many-to-many relation """
 
     id = PrimaryKey(int, auto=True)
     name = Required(str)

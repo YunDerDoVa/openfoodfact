@@ -4,6 +4,7 @@ from .openfoodfacts import OpenFoodFacts
 from .input import Input
 from .favor import FavorProcess
 from .search import SearchProcess
+from . import settings
 
 # -tc- Pour les projets futurs, tu peux gérer les arguments de la ligne de
 # -tc- commande avec click ou argparse (bibliothèque standard)
@@ -13,6 +14,12 @@ def check_argv():
     with the OpenFoodFacts REST api. """
 
     if len(sys.argv) > 0:
+        if "verbose" in sys.argv:
+            settings.VERB = True
+
+        if "debug" in sys.argv:
+            settings.DEBUG = True
+
         if "fill_database" in sys.argv:
             openfoodfacts = OpenFoodFacts()
             openfoodfacts.fill_database()

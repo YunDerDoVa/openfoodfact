@@ -18,18 +18,31 @@ class ProductDownloader:
 
         print("Fetching " + category)
 
-        url = "https://fr.openfoodfacts.org/categorie/" + category + ".json"
-        r = requests.get(str(url))
+        url = (
+            "https://world.openfoodfacts.org/cgi/search.pl"
+        )
+        payload = {
+            'search_terms': category,
+            'search_simple': 1,
+            'action': 'process',
+            'json': 1,
+            'page_size': 10
+        }
+        r = requests.get(str(url), payload)
         page = json.loads(r.text)
 
-        number_of_pages = int(page["count"] / page["page_size"])
-        if number_of_pages > 100:
-            number_of_pages = 100
+        # Define page size
+        page_size = 500
+
+        # Calcul number of pages
+        number_of_pages = int(int(page["count"]) / page_size)
         if settings.DEBUG:
             number_of_pages = 1
 
+        print(str(page['count']) + " products")
         print(str(number_of_pages) + " pages")
 
+        payload['page_size'] = page_size
         for index_page in range(number_of_pages):
             print("##### " + str(category))
             print(
@@ -39,23 +52,23 @@ class ProductDownloader:
                 + str(number_of_pages)
             )
 
-            url = (
-                "https://fr.openfoodfacts.org/categorie/"
-                + category
-                + "/"
-                + str(index_page + 1)
-                + ".json"
-            )
-            r = requests.get(str(url))
+            payload['page'] = index_page
+            r = requests.get(str(url), payload)
             page = json.loads(r.text)
 
-            for index_page_product in range(page["page_size"]):
-                print(
-                    "product "
-                    + str(index_page_product + 1)
-                    + "/"
-                    + str(page["page_size"])
-                )
+            page_count = page_size
+            if int(page["count"]) - page_size * index_page < 0:
+                page_count = page['count'] % page_size
+
+
+            for index_page_product in range(page_count):
+                if settings.VERB:
+                    print(
+                        "product "
+                        + str(index_page_product + 1)
+                        + "/"
+                        + str(page["page_size"])
+                    )
 
                 self.products.append(page["products"][index_page_product])
 
@@ -121,6 +134,7 @@ class DBFiller:
         nutriments = product["nutriments"]
         brands = product["brands"]
         categories = product["categories_tags"]
+        stores = product['stores']
 
         """2.  Insert Food Entity in database """
         food = Food(
@@ -148,7 +162,17 @@ class DBFiller:
                 category = Category(name=category_name)
             category.foods.add(food)
 
-        """ 5. Commit Entities """
+        """ 5. Insert Store if it don't exists and link it to the Food """
+        for store_name in product["stores"]:
+            if Store.exists(name=store_name):
+                store = Store.select(
+                    lambda c: c.name == store_name
+                ).first()
+            else:
+                store = Store(name=store_name)
+            store.foods.add(food)
+
+        """ 6. Commit Entities """
         commit()
 
 
@@ -163,7 +187,7 @@ class OpenFoodFacts:
         products = downloader.fetch_products_list(
             [
                 "fruits",
-                "legumes-et-derives",
+#                "legumes",
 #                "frais",
 #                "sucres",
 #                "boissons",
