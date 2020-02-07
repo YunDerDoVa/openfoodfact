@@ -33,6 +33,8 @@ class ProductDownloader:
 
         # Define page size
         page_size = 1000
+        if settings.DEBUG:
+            page_size = 20
 
         # Calcul number of pages
         number_of_pages = int(int(page["count"]) / page_size)
@@ -196,12 +198,12 @@ class OpenFoodFacts:
         products = downloader.fetch_products_list(
             [
                 "fruits",
-#                "legumes",
-#                "frais",
-#                "sucres",
-#                "boissons",
-#                "viandes",
-#                "laits",
+                "legumes",
+                "frais",
+                "sucres",
+                "boissons",
+                "viandes",
+                "laits",
             ]
         )
 

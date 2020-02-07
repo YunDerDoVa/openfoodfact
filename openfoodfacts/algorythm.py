@@ -9,15 +9,22 @@ import math
 
 
 class Algorythm:
+    """ This class calcul datas of two foods to determine the real proximity
+    of the differents nutriments into the food """
 
     matrice = [1, 1, 2, 1, 1, 2, 2, 1, 1, 5]
 
     def __init__(self, food_1, food_2):
+        """ init method takes two foods in argument """
+
         self.nutriments_data_1 = Algorythm.get_nutriments_data(food_1)
         self.nutriments_data_2 = Algorythm.get_nutriments_data(food_2)
 
     @staticmethod
     def get_nutriments_data(food):
+        """ Its static method return a dict having all required
+        nutritive data to run the algorithme """
+
         data = [
             float(food.nutriments["fat"]),
             float(food.nutriments["salt"]),
@@ -33,8 +40,7 @@ class Algorythm:
         return data
 
     def compare_datas(self):
-
-        # print("Comparing\n" + str(self.nutriments_data_1) + "\nand\n" + str(self.nutriments_data_2))
+        """ This method return a array of scores """
 
         list = []
 
@@ -45,6 +51,9 @@ class Algorythm:
         return list
 
     def get_score(self):
+        """ This method return a score who represent an arbitrary difference
+        between the two foods of this class """
+
         score = 0
 
         for num in self.compare_datas():

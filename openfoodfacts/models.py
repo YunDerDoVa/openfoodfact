@@ -21,11 +21,15 @@ class Food(db.Entity):
     stores = Set("Store")
     code = Required(str)
     nutriments = Required(Json)
-    substitute_of = Optional('Food', reverse='substitutes')
-    substitutes = Set('Food', reverse='substitute_of')
+    substitutes_of = Set('Food', reverse='substitutes')
+    substitutes = Set('Food', reverse='substitutes_of')
 
     @db_session
     def print_infos(self):
+        """ This method print all infos of the food, the method __str__ is
+        not used because she is even used by ponyORM and we prefer let ponyORM
+        use it to develope in better conditions """
+
         brands = Brand.select(lambda b: self in b.foods)
         stores = Store.select(lambda s: self in s.foods)
 
@@ -41,6 +45,10 @@ class Food(db.Entity):
         print("#########################\n")
 
     def test_substitute(self, food, power):
+        """ This method test if the current object is compatible with the
+        pood passed in argument and the given power
+        (power is a arbitrary value who quantify the difference between
+        foods) """
 
         algorythm = Algorythm(self, food)
 
@@ -50,6 +58,8 @@ class Food(db.Entity):
             return True
 
     def find_substitue(self):
+        """ This method find a substitute of the current object """
+
         substitutes = Food.select(lambda f: f != self)
         searching = True
         counter = 0.0
@@ -78,6 +88,9 @@ class Food(db.Entity):
                 return self
 
     def test_food(self):
+        """ This method test if the food have all required data to find
+        substitute """
+
         try:
             Algorythm.get_nutriments_data(self)
             return True
