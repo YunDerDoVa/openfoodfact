@@ -121,9 +121,12 @@ You need to install MySQL and launch the server manually
 ### 3 : Create Database
 
 When your server is up, you need to create a new database and change the infos
-in the settings file (openfoodfacts/settings.py).
+in the settings file (openfoodfacts/settings.py)
 
 ### 4 : Fill the database
+
+You need to use *pipenv* please see the documentation
+[here](https://pypi.org/project/pipenv/)
 
 `cd openfoodfacts`
 
