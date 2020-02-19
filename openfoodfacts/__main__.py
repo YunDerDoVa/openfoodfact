@@ -8,6 +8,8 @@ from . import settings
 
 # -tc- Pour les projets futurs, tu peux gérer les arguments de la ligne de
 # -tc- commande avec click ou argparse (bibliothèque standard)
+
+
 def check_argv():
     """ This function the arguments. If 'fill_database' is passed
     in command, it initialise the OpenFoodFacts class and fill the database

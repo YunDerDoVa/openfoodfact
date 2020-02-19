@@ -14,7 +14,7 @@ class Input:
 
         try:
             new_input = int(new_input)
-        except:
+        except BaseException:
             print(self.MSG_NO_NUMBER)
             return False
         if(min > new_input or new_input > max):

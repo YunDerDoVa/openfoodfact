@@ -3,13 +3,14 @@ import math
 import random
 
 from pony.orm import Database, db_session
-from pony.orm import PrimaryKey, Required, Set, Optional, Json
+from pony.orm import PrimaryKey, Required, Set, Json
 
 from .settings import MYSQL_HOST, MYSQL_USER, MYSQL_PASSWORD, MYSQL_DB
 from .algorythm import Algorythm
 
 
 db = Database()
+
 
 class Food(db.Entity):
     """ Food Class contains the data of openfoodfacts """
@@ -34,7 +35,10 @@ class Food(db.Entity):
         stores = Store.select(lambda s: self in s.foods)
 
         print("##### Name : " + self.name)
-        print("##### Link : https://world.openfoodfacts.org/product/" + self.code)
+        print(
+            "##### Link : https://world.openfoodfacts.org/product/"
+            + self.code
+        )
         print("##### Brands :")
         for brand in brands:
             print("##### \t- " + brand.name)
@@ -81,7 +85,7 @@ class Food(db.Entity):
 
             if len(match_list) > 0:
                 print(str(len(match_list)) + ' substitutes found...')
-                return match_list[int(random.random() * (len(match_list)-1))]
+                return match_list[int(random.random() * (len(match_list) - 1))]
 
             if power > math.exp(100):
                 print("No substitute found, here is your food stats.")
@@ -94,7 +98,7 @@ class Food(db.Entity):
         try:
             Algorythm.get_nutriments_data(self)
             return True
-        except:
+        except BaseException:
             return False
 
 

@@ -1,7 +1,7 @@
 from pony.orm import db_session, commit
 
 from .input import Input
-from .models import Category, Food, Brand
+from .models import Category, Food
 
 
 class SearchProcess:

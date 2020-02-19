@@ -3,6 +3,7 @@ from pony.orm import db_session
 from .input import Input
 from .models import Food
 
+
 class FavorProcess:
 
     def __init__(self):
@@ -54,7 +55,8 @@ class FavorProcess:
         Food[favor.id].substitutes.remove(Food[substitutes[id].id])
 
     def run(self):
-        """ This method run the process to allow the user to find his favor. """
+        """ This method run the process to allow the user to find his
+        favor. """
 
         if len(self.favors) == 0:
             print("You don't have favor yet. Please save a substitute before")
@@ -70,7 +72,10 @@ class FavorProcess:
 
         substitutes = self.__print_favor(favor)
 
-        text = "Do you want to delete this favor ? No (0) / Yes (id of substitute)"
+        text = (
+            "Do you want to delete this favor ?"
+            + " No (0) / Yes (id of substitute)"
+        )
         input_obj.set_input(text, 0, len(substitutes))
         if(input_obj.new_input > 0):
-            self.__delete(favor, substitutes, input_obj.new_input-1)
+            self.__delete(favor, substitutes, input_obj.new_input - 1)

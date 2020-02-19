@@ -1,9 +1,4 @@
 # -tc- algorithm s'écrit avec un i
-
-# -tc- documenter le code à l'aide de docstrings au niveau module, classe,
-# -tc- méthode et fonction
-import math
-
 # -tc- pas convaincu par l'algorithme. Je me réjouis de discuter les résultats
 # -tc- en session
 
