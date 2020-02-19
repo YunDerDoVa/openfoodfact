@@ -116,7 +116,12 @@ method **search_algorithm**
 
 ### 2 : Install MySQL
 
+You need to install MySQL and launch the server manually
+
 ### 3 : Create Database
+
+When your server is up, you need to create a new database and change the infos
+in the settings file (openfoodfacts/settings.py).
 
 ### 4 : Fill the database
 
