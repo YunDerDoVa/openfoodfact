@@ -174,7 +174,7 @@ class DBFiller:
             category.foods.add(food)
 
         """ 5. Insert Store if don't exists and link it to the Food """
-        for store_name in stores:
+        for store_name in stores.split(','):
             if Store.exists(name=store_name):
                 store = Store.select(
                     lambda c: c.name == store_name
